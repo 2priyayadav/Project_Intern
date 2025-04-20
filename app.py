@@ -1,10 +1,11 @@
 import streamlit as st
 import pandas as pd
 from query_functions import query_handling_using_LLM_updated
+# from bs4 import BeautifulSoup
+
 
 st.set_page_config(page_title="SHL Assessment Recommendation System", layout="centered")
 
-# 🌌 Styling + Header
 st.markdown(
     """
     <style>
@@ -12,6 +13,9 @@ st.markdown(
             background-color: #0e1117;
             color: #f0f2f6;
             font-family: 'Segoe UI', sans-serif;
+        }
+        .main {
+            padding: 2rem;
         }
         .stTextInput > div > div > input {
             background-color: #1c1e24;
@@ -35,13 +39,12 @@ st.markdown(
         }
     </style>
     <h1 style='text-align: center; color: #4B8BBE;'>🤖 SHL Assessment Recommender</h1>
-    <h4 style='text-align: center; color: #aaa;'>Find the best assessment using AI!</h4>
+    <h4 style='text-align: center; color: #aaa;'>Find the best assessment using AI! :)</h4>
     <hr>
     """,
     unsafe_allow_html=True
 )
 
-# 🔍 User Input
 query = st.text_input("🔍 Enter your search query here:", placeholder="e.g. Python SQL coding test")
 
 if st.button("Search"):
@@ -53,27 +56,19 @@ if st.button("Search"):
                 df = query_handling_using_LLM_updated(query)
 
                 if isinstance(df, pd.DataFrame) and not df.empty:
-                    # 🧹 Clean and format the dataframe
-                    df = df.drop_duplicates(subset=["Assessment Name", "Description"], keep="first")
-
                     if 'Score' in df.columns:
                         df = df.drop(columns=['Score'])
 
                     if "Duration" in df.columns:
                         df = df.rename(columns={"Duration": "Duration in mins"})
 
-                    # Clean line breaks
-                    df = df.replace({r'\n': ' ', r'\r': ' '}, regex=True)
-
-                    # Format link
-                    if 'URL' in df.columns:
-                        df['URL'] = df['URL'].apply(lambda x: f"<a href='{x}' target='_blank'>🔗 View</a>" if pd.notna(x) else "")
-
-                    # Reorder + display only valid columns
                     display_cols = ["Assessment Name", "Test Type", "Description", "Remote Testing Support", "Adaptive/IRT", "Duration in mins", "URL"]
                     df = df[[col for col in display_cols if col in df.columns]]
 
-                    # ✅ Custom HTML Table
+                    df['URL'] = df['URL'].apply(lambda x: f"<a href='{x}' target='_blank'>🔗 View</a>" if pd.notna(x) else "")
+
+                    st.success("✅ Here are your top assessment recommendations:")
+
                     table_html = """
                     <style>
                         table.custom-table {
@@ -118,14 +113,22 @@ if st.button("Search"):
                         }
                     </style>
                     <table class="custom-table">
-                        <thead><tr>""" + "".join([f"<th>{col}</th>" for col in df.columns]) + "</tr></thead><tbody>"
+                        <thead>
+                            <tr>
+                    """
+
+                    for col in df.columns:
+                        table_html += f"<th>{col}</th>"
+                    table_html += "</tr></thead><tbody>"
 
                     for _, row in df.iterrows():
-                        table_html += "<tr>" + "".join([f"<td>{cell}</td>" for cell in row]) + "</tr>"
+                        table_html += "<tr>"
+                        for cell in row:
+                            table_html += f"<td>{cell}</td>"
+                        table_html += "</tr>"
 
                     table_html += "</tbody></table>"
 
-                    st.success("✅ Here are your top assessment recommendations:")
                     st.markdown(table_html, unsafe_allow_html=True)
 
                 else:
