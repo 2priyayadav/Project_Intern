@@ -5,3 +5,5 @@ pandas
 lxml
 html5lib
 pandas
+sentence-transformers
+
