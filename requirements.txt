@@ -1,9 +1,14 @@
+fastapi
+uvicorn
 streamlit
+pandas
+numpy
+sentence-transformers
+torch
+google-generativeai
+python-dotenv
 beautifulsoup4
 requests
-pandas
-lxml
-html5lib
-pandas
-sentence-transformers
+pydantic
+
 
