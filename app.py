@@ -389,8 +389,8 @@ lottie_robot = load_lottieurl("https://assets4.lottiefiles.com/packages/lf20_tut
 st.markdown("""
 <style>
 html, body {
-    background: linear-gradient(to right, #1f1c2c, #928dab);
-    color: #f0f2f6;
+    background: linear-gradient(to right, #e0f7ff, #ffffff);
+    color: #1e1e1e;
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
 }
@@ -399,15 +399,15 @@ body {
 }
 .stTextInput > div > div > input,
 .stSelectbox > div > div > div {
-    background-color: #2a2d3a;
-    color: #f0f2f6;
+    background-color: #f1f9ff;
+    color: #1e1e1e;
     border-radius: 10px;
     border: none;
     padding: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 .stButton>button {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #4da8ff, #5170fd);
     color: white;
     font-weight: bold;
     border-radius: 10px;
@@ -417,34 +417,36 @@ body {
 }
 .stButton>button:hover {
     transform: scale(1.05);
-    background: linear-gradient(135deg, #764ba2, #667eea);
+    background: linear-gradient(135deg, #5170fd, #4da8ff);
 }
 .sidebar .sidebar-content {
-    background-color: #1c1e2f;
+    background-color: #f0f4ff;
     padding: 2rem;
     position: sticky;
     top: 0;
     height: 100vh;
     overflow: auto;
+    color: #1e1e1e;
 }
 hr {
-    border-top: 1px solid #555;
+    border-top: 1px solid #ccc;
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
 .card {
-    background: #2a2d3a;
+    background: #dceeff;
     border-radius: 15px;
     padding: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     transition: 0.3s;
+    color: #1e1e1e;
 }
 .card:hover {
     transform: scale(1.03);
-    background: #3c3f4a;
+    background: #cce6ff;
 }
 .card a {
-    color: #61dafb;
+    color: #0a74da;
     font-weight: 600;
     text-decoration: none;
 }
@@ -459,8 +461,8 @@ col1, col2 = st.columns([1, 2])
 with col1:
     st_lottie(lottie_robot, height=180)
 with col2:
-    st.markdown("<h1 style='color: #f0f2f6;'>🤖 SHL Assessment Recommender</h1>", unsafe_allow_html=True)
-    st.markdown("<h4 style='color: #dcdde1;'>Find the best assessment using AI! 🎯</h4>", unsafe_allow_html=True)
+    st.markdown("<h1 style='color: #1e1e1e;'>🤖 SHL Assessment Recommender</h1>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color: #333;'>Find the best assessment using AI! 🎯</h4>", unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -558,6 +560,3 @@ for idx, rec in enumerate(recommendations):
             <a href='{rec['url']}' target='_blank'>👉 Try Now</a>
         </div>
         """, unsafe_allow_html=True)
-
-
-
