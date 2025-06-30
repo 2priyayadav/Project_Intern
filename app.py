@@ -363,7 +363,6 @@
 
 
 
-
 import streamlit as st
 import pandas as pd
 from query_functions import query_handling_using_LLM_updated
@@ -390,36 +389,67 @@ lottie_robot = load_lottieurl("https://assets4.lottiefiles.com/packages/lf20_tut
 st.markdown("""
 <style>
 html, body {
-    background-color: #0e1117;
+    background: linear-gradient(to right, #1f1c2c, #928dab);
     color: #f0f2f6;
     font-family: 'Segoe UI', sans-serif;
+    margin: 0;
 }
 body {
-    background-image: radial-gradient(#2a303c 1px, transparent 1px);
-    background-size: 20px 20px;
+    background-attachment: fixed;
 }
 .stTextInput > div > div > input,
 .stSelectbox > div > div > div {
-    background-color: #1c1e24;
+    background-color: #2a2d3a;
     color: #f0f2f6;
-    border-radius: 8px;
-    border: 1px solid #555;
+    border-radius: 10px;
+    border: none;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
 }
 .stButton>button {
-    background-color: #4B8BBE;
+    background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
     font-weight: bold;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 0.5rem 1.5rem;
     border: none;
+    transition: 0.3s ease;
 }
 .stButton>button:hover {
-    background-color: #306998;
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #764ba2, #667eea);
+}
+.sidebar .sidebar-content {
+    background-color: #1c1e2f;
+    padding: 2rem;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: auto;
 }
 hr {
-    border-top: 1px solid #444;
+    border-top: 1px solid #555;
     margin-top: 2rem;
     margin-bottom: 2rem;
+}
+.card {
+    background: #2a2d3a;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    transition: 0.3s;
+}
+.card:hover {
+    transform: scale(1.03);
+    background: #3c3f4a;
+}
+.card a {
+    color: #61dafb;
+    font-weight: 600;
+    text-decoration: none;
+}
+.card a:hover {
+    text-decoration: underline;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -429,8 +459,8 @@ col1, col2 = st.columns([1, 2])
 with col1:
     st_lottie(lottie_robot, height=180)
 with col2:
-    st.markdown("<h1 style='color: #4B8BBE;'>🤖 SHL Assessment Recommender</h1>", unsafe_allow_html=True)
-    st.markdown("<h4 style='color: #aaa;'>Find the best assessment using AI! 🎯</h4>", unsafe_allow_html=True)
+    st.markdown("<h1 style='color: #f0f2f6;'>🤖 SHL Assessment Recommender</h1>", unsafe_allow_html=True)
+    st.markdown("<h4 style='color: #dcdde1;'>Find the best assessment using AI! 🎯</h4>", unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -479,63 +509,18 @@ if st.button("Search"):
                     df['URL'] = df['URL'].apply(lambda x: f"<a href='{x}' target='_blank'>🔗 View</a>" if pd.notna(x) else "")
 
                     st.success("✅ Here are your top assessment recommendations:")
-
-                    table_html = """
-                    <style>
-                        table.custom-table {
-                            width: 100%;
-                            border-collapse: separate;
-                            border-spacing: 0;
-                            font-family: 'Segoe UI', sans-serif;
-                            font-size: 15px;
-                            border-radius: 12px;
-                            overflow: hidden;
-                            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                            margin-top: 1rem;
-                        }
-                        table.custom-table thead {
-                            background: linear-gradient(to right, #4B8BBE, #306998);
-                            color: white;
-                            font-weight: 600;
-                        }
-                        table.custom-table th, table.custom-table td {
-                            padding: 14px 18px;
-                            text-align: left;
-                            vertical-align: top;
-                        }
-                        table.custom-table tbody tr {
-                            background-color: #181c24;
-                            color: #f0f2f6;
-                            border-bottom: 1px solid #333;
-                        }
-                        table.custom-table tbody tr:nth-child(even) {
-                            background-color: #1f242e;
-                        }
-                        table.custom-table tbody tr:hover {
-                            background-color: #2a303c;
-                        }
-                        a {
-                            color: #61dafb;
-                            text-decoration: none;
-                            font-weight: 500;
-                        }
-                        a:hover {
-                            text-decoration: underline;
-                        }
-                    </style>
-                    <table class="custom-table">
-                        <thead><tr>"""
-                    for col in df.columns:
-                        table_html += f"<th>{col}</th>"
-                    table_html += "</tr></thead><tbody>"
                     for _, row in df.iterrows():
-                        table_html += "<tr>"
-                        for cell in row:
-                            table_html += f"<td>{cell}</td>"
-                        table_html += "</tr>"
-                    table_html += "</tbody></table>"
-                    st.markdown(table_html, unsafe_allow_html=True)
-
+                        st.markdown("""
+                            <div class='card'>
+                                <h3>🧪 {}</h3>
+                                <p><b>Type:</b> {}</p>
+                                <p><b>Support:</b> {} | <b>Adaptive:</b> {}</p>
+                                <p><b>Duration:</b> {}</p>
+                                <p>{}</p>
+                                {}
+                            </div>
+                            <br>
+                        """.format(row['Assessment Name'], row['Test Type'], row['Remote Testing Support'], row['Adaptive/IRT'], row['Duration in mins'], row['Description'], row['URL']), unsafe_allow_html=True)
                 else:
                     st.warning("😕 No assessments matched your query. Try rephrasing it!")
 
@@ -566,8 +551,13 @@ recommendations = [
 rec_cols = st.columns(len(recommendations))
 for idx, rec in enumerate(recommendations):
     with rec_cols[idx]:
-        st.markdown(f"### 🔸 {rec['title']}")
-        st.markdown(f"*{rec['desc']}*")
-        st.markdown(f"[👉 Try Now]({rec['url']})", unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class='card'>
+            <h4>📘 {rec['title']}</h4>
+            <p>{rec['desc']}</p>
+            <a href='{rec['url']}' target='_blank'>👉 Try Now</a>
+        </div>
+        """, unsafe_allow_html=True)
+
 
 
