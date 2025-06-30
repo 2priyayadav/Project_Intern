@@ -10,5 +10,6 @@ python-dotenv
 beautifulsoup4
 requests
 pydantic
+streamlit-lottie
 
 
